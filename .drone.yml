@@ -24,7 +24,7 @@ steps:
   - name: publish
     image: node:12
     commands:
-      - npm version prerelease --preid=`git rev-parse --abbrev-ref HEAD`"-"`git rev-parse --short HEAD`
+      - npm version prerelease --preid=`git rev-parse --short HEAD`
       - npm ci
       - npm run build
       - npm publish 
