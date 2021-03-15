@@ -1,0 +1,36 @@
+kind: pipeline
+name: default
+
+steps:
+  - name: fetch
+    image: docker:git
+    commands:
+      - git fetch --tags
+
+  - name: npm-auth
+    image: robertstettner/drone-npm-auth
+    settings:
+      registry:
+        from_secret: npm_registry
+      username:
+        from_secret: npm_user
+      password:
+        from_secret: npm_password
+      email: 
+        from_secret: npm_email
+      scope: 
+        from_secret: npm_scope
+
+  - name: publish
+    image: node:12
+    commands:
+      - VERSION="next-"`git rev-parse --abbrev-ref HEAD`"-"`git rev-parse --short HEAD`
+      - npm version $VERSION
+      - npm ci
+      - npm run build
+      - npm publish 
+trigger:
+  branch:
+    - master
+  event:
+    - push
