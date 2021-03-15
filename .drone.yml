@@ -26,7 +26,7 @@ steps:
     commands:
       - npm version prerelease --preid=`git rev-parse --short HEAD`
       - npm ci
-      - npm run build
+      - npm run build --production
       - npm publish 
 trigger:
   branch:
